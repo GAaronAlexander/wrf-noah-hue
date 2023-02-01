@@ -4530,11 +4530,10 @@ IF(.not.restart)THEN !! only do these if this is a restart, otherwise,we have
   ! things already generated/read in
      DO i = its,itf
         DO j = jts,jtf
-
+               WRITE(*,*) 'i =', i, 'j =', j, 'ims = ', ims, 'ime = ', ime, 'jms =', jms, 'jme = ', jme
              DO mosaic_i=1,mosaic_cat
 
                 !add qualifer for the mosaic croptpes
-
             ZNT_mosaic(i,mosaic_i,j)=Z0(i,j) !roughness following Dan Li in Noah model
             Z0_mosaic(i,mosaic_i,j)=Z0(i,j) !roughness following Dan LI in Noah Model
 
@@ -4811,7 +4810,7 @@ SUBROUTINE NOAHMPLSM_MOSAIC_HUE(ITIMESTEP,        YR,   JULIAN,   COSZIN,XLAT,XL
                           ACC_ETRANIXY_mosaic, EFLXBXY_mosaic, SOILENERGY_mosaic, SNOWENERGY_mosaic, &
                           CANHSXY_mosaic, ACC_DWATERXY_mosaic, ACC_PRCPXY_mosaic,               &
                           ACC_ECANXY_mosaic, ACC_EDIRXY_mosaic, ACC_ETRANXY_mosaic,             &
-
+                          use_wudapt_lcz,                                                       & !Aaron A. Mosiac
                           TR_URB2D_mosaic,TB_URB2D_mosaic,                                      & !H urban  Aaron A. Mosaic
                           TG_URB2D_mosaic,TC_URB2D_mosaic,                                      & !H urban  Aaron A. Mosaic
                           QC_URB2D_mosaic,UC_URB2D_mosaic,                                      & !H urban  Aaron A. Mosaic
@@ -5401,12 +5400,12 @@ type(noahmp_parameters) :: parameters
 !-----------------------------------------------------------------------
 
 ! input variables surface_driver --> lsm
-
+     INTEGER,                                                INTENT(IN   ) :: use_wudapt_lcz
      INTEGER,                                                INTENT(IN   ) :: num_roof_layers
      INTEGER,                                                INTENT(IN   ) :: num_wall_layers
      INTEGER,                                                INTENT(IN   ) :: num_road_layers
-     INTEGER,        DIMENSION( ims:ime, jms:jme ),          INTENT(IN   ) :: UTYPE_URB2D
-     REAL,           DIMENSION( ims:ime, jms:jme ),          INTENT(IN   ) :: FRC_URB2D
+     INTEGER,        DIMENSION( ims:ime, jms:jme ),          INTENT(INOUT   ) :: UTYPE_URB2D !aaron A. 
+     REAL,           DIMENSION( ims:ime, jms:jme ),          INTENT(INOUT   ) :: FRC_URB2D ! aarohn A. 
 
      REAL, OPTIONAL, DIMENSION(1:num_roof_layers),           INTENT(IN   ) :: DZR
      REAL, OPTIONAL, DIMENSION(1:num_wall_layers),           INTENT(IN   ) :: DZB
@@ -7058,10 +7057,51 @@ type(noahmp_parameters) :: parameters
           !--------------------------------------
           ! URBAN CANOPY MODEL START
           !--------------------------------------
+           IF( IVGTYP(I,J) == ISURBAN_TABLE    .or. IVGTYP(I,J) == LCZ_1_TABLE .or. IVGTYP(I,J) == LCZ_2_TABLE .or. &
+                     IVGTYP(I,J) == LCZ_3_TABLE      .or. IVGTYP(I,J) == LCZ_4_TABLE .or. IVGTYP(I,J) == LCZ_5_TABLE .or. &
+                     IVGTYP(I,J) == LCZ_6_TABLE      .or. IVGTYP(I,J) == LCZ_7_TABLE .or. IVGTYP(I,J) == LCZ_8_TABLE .or. &
+                     IVGTYP(I,J) == LCZ_9_TABLE      .or. IVGTYP(I,J) == LCZ_10_TABLE .or. IVGTYP(I,J) == LCZ_11_TABLE ) THEN
+ 
+      
+                !  UTYPE_URB = UTYPE_URB2D(I,J) !urban type (low, high or industrial)
+                !  this need to be changed in the mosaic danli
+                IF (use_wudapt_lcz == 1) THEN
+                  IF(IVGTYP(I,J)==ISURBAN_TABLE) UTYPE_URB=5
+                  IF(IVGTYP(I,J)==LCZ_1_TABLE) UTYPE_URB=1
+                  IF(IVGTYP(I,J)==LCZ_2_TABLE) UTYPE_URB=2
+                  IF(IVGTYP(I,J)==LCZ_3_TABLE) UTYPE_URB=3
+                  IF(IVGTYP(I,J)==LCZ_4_TABLE) UTYPE_URB=4
+                  IF(IVGTYP(I,J)==LCZ_5_TABLE) UTYPE_URB=5
+                  IF(IVGTYP(I,J)==LCZ_6_TABLE) UTYPE_URB=6
+                  IF(IVGTYP(I,J)==LCZ_7_TABLE) UTYPE_URB=7
+                  IF(IVGTYP(I,J)==LCZ_8_TABLE) UTYPE_URB=8
+                  IF(IVGTYP(I,J)==LCZ_9_TABLE) UTYPE_URB=9
+                  IF(IVGTYP(I,J)==LCZ_10_TABLE) UTYPE_URB=10
+                  IF(IVGTYP(I,J)==LCZ_11_TABLE) UTYPE_URB=11
+
+                  IF(UTYPE_URB==1) FRC_URB2D(I,J)=1.
+                  IF(UTYPE_URB==2) FRC_URB2D(I,J)=0.99
+                  IF(UTYPE_URB==3) FRC_URB2D(I,J)=1.00
+                  IF(UTYPE_URB==4) FRC_URB2D(I,J)=0.65
+                  IF(UTYPE_URB==5) FRC_URB2D(I,J)=0.7
+                  IF(UTYPE_URB==6) FRC_URB2D(I,J)=0.65
+                  IF(UTYPE_URB==7) FRC_URB2D(I,J)=0.3
+                  IF(UTYPE_URB==8) FRC_URB2D(I,J)=0.85
+                  IF(UTYPE_URB==9) FRC_URB2D(I,J)=0.3
+                  IF(UTYPE_URB==10) FRC_URB2D(I,J)=0.55
+                  IF(UTYPE_URB==11) FRC_URB2D(I,J)=1.
+                ELSE
+                  IF(IVGTYP(I,J)==ISURBAN_TABLE) UTYPE_URB=2
+                  IF(IVGTYP(I,J)==LCZ_1_TABLE) UTYPE_URB=1 ! LOW_DENSITY_RESIDENTIAL
+                  IF(IVGTYP(I,J)==LCZ_2_TABLE) UTYPE_URB=2 ! HIGH_DENSITY_RESIDENTIAL
+                  IF(IVGTYP(I,J)==LCZ_3_TABLE) UTYPE_URB=3 ! HIGH_INTENSITY_INDUSTRIAL
+
+                  IF(UTYPE_URB==1) FRC_URB2D(I,J)=0.5
+                  IF(UTYPE_URB==2) FRC_URB2D(I,J)=0.9
+                  IF(UTYPE_URB==3) FRC_URB2D(I,J)=0.95
+                END IF
 
 
-            IF( IVGTYP(I,J) == ISURBAN_TABLE .or. IVGTYP(I,J) == LCZ_1_TABLE .or. &
-                IVGTYP(I,J) == LCZ_2_TABLE .or. IVGTYP(I,J) == LCZ_3_TABLE ) THEN
 
               ! Begin addition by Aaron A. on 27 May 2022.
               ! This reads in the mosaic values to hopefully
@@ -7108,7 +7148,7 @@ type(noahmp_parameters) :: parameters
 
 
 
-              UTYPE_URB = UTYPE_URB2D(I,J) !urban type (low, high or industrial)
+              !UTYPE_URB = UTYPE_URB2D(I,J) !urban type (low, high or industrial)
 
               TA_URB    = T3D(I,1,J)                                ! [K]
               QA_URB    = QV3D(I,1,J)/(1.0+QV3D(I,1,J))             ! [kg/kg]
@@ -7940,7 +7980,9 @@ type(noahmp_parameters) :: parameters
               RUNONSFXY(I,J) = RUNONSFXY_mosaic_avg(I,J)
 
 
+            WRITE(*,*) 'I', I, 'J', J, 'LH', LH(I,J)
 
+            WRITE(*,*) 'I', I, 'J', J, 'TGVXY', TGVXY(I,J)
 
             ENDIF ! End of the Soil-Water_ice If else statement
 

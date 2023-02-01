@@ -1161,7 +1161,7 @@ BENCH_START(surf_driver_tim)
 #endif
 
 BENCH_END(surf_driver_tim)
-
+write(*,*) 'IN RFK1', 'LH', grid%LH(grid%i_start,grid%j_start), 'TGVXY',grid%TGVXY(grid%i_start,grid%j_start)
 !*********
 ! pbl
 #if ( WRFPLUS == 1 )

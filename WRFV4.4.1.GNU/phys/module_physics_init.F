@@ -3886,6 +3886,8 @@ CALL lsm_mosaic_init(IVGTYP,config_flags%ISWATER,config_flags%ISURBAN,config_fla
                         XXXR_URB2D_mosaic, XXXB_URB2D_mosaic, XXXG_URB2D_mosaic, XXXC_URB2D_mosaic,              &
                         CMCR_URB2D_mosaic, TGR_URB2D_mosaic,                                  &
                         TGRL_URB3D_mosaic, SMR_URB3D_mosaic,                                  &
+                        DRELR_URB2D_mosaic, DRELB_URB2D_mosaic, DRELG_URB2D_mosaic,           &
+                        FLXHUMR_URB2D_mosaic, FLXHUMB_URB2D_mosaic, FLXHUMG_URB2D_mosaic,     &
                         DETENTION_STORAGEXY_mosaic,                                           &
 #if ( NMM_CORE == 1 )
                                                                                     Z0, &            ! Added by Aaron A. (Following Dan Li)

@@ -3244,6 +3244,7 @@ if (IOPT_MOS.eq.1) THEN !mosaic check
                                    ACC_ETRANIXY_mosaic, EFLXBXY_mosaic, SOILENERGY_mosaic, SNOWENERGY_mosaic, &
                                    CANHSXY_mosaic, ACC_DWATERXY_mosaic, ACC_PRCPXY_mosaic, ACC_ECANXY_mosaic, ACC_EDIRXY_mosaic, &
                                    ACC_ETRANXY_mosaic,                                                   &
+                                   use_wudapt_lcz,                                                       &
                                    TR_URB2D_mosaic,TB_URB2D_mosaic,                                      & !H urban  Aaron A. Mosaic
                                    TG_URB2D_mosaic,TC_URB2D_mosaic,                                      & !H urban  Aaron A. Mosaic
                                    QC_URB2D_mosaic,UC_URB2D_mosaic,                                      & !H urban  Aaron A. Mosaic
@@ -3284,7 +3285,12 @@ if (IOPT_MOS.eq.1) THEN !mosaic check
                                    RUNONSFXY,RUNONSFXY_mosaic,DETENTION_STORAGEXY,                       &
                                    VOL_FLUX_RUNONXY_mosaic, VOL_FLUX_SMXY_mosaic,                        &
                                     MP_RAINC = RAINCV, MP_RAINNC = RAINNCV, MP_SHCV = RAINSHV, MP_SNOW = SNOWNCV, MP_GRAUP = GRAUPELNCV, MP_HAIL = HAILNCV)! HUE SPECIFIC VARIABLES
-
+WRITE(*,*) 'SURFACE DRIVER: AFTER CALL'
+         DO j = j_start(ij) , j_end(ij)
+               DO i = i_start(ij) , i_end(ij)
+                   write(*,*) 'i', i, 'j', j, 'lh', lh(i,j), 'tgvxy', tgvxy(i,j)
+               enddo 
+         enddo
 
         ELSE
             CALL wrf_error_fatal('Lack arguments to call Noah-MP mosaic & HUE')
