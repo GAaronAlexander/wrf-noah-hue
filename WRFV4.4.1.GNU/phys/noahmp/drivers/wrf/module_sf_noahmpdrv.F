@@ -633,7 +633,7 @@ CONTAINS
     REAL, DIMENSION( 1:nsoil ) :: SAND
     REAL, DIMENSION( 1:nsoil ) :: CLAY
     REAL, DIMENSION( 1:nsoil ) :: ORGM
-    ! added for complience with Noah-mp HUE scheme (doesnt change a thing, jsut stops an error) Aaron A. 
+    ! added for complience with Noah-mp HUE scheme (doesnt change a thing, jsut stops an error) Aaron A.
     REAL,    DIMENSION( 1:nsoil)  ::  SMC_intermediate     ! volumetric soil moisture [m3/m3]
     REAL,    DIMENSION( 1:nsoil)  ::  SH2O_intermediate      ! volumetric liquid soil moisture [m3/m3]
 
@@ -804,10 +804,10 @@ CONTAINS
        ISNOW                 = ISNOWXY (I,J)                ! snow layers []
        SMC  (      1:NSOIL)  = SMOIS   (I,      1:NSOIL,J)  ! soil total moisture [m3/m3]
        SMH2O(      1:NSOIL)  = SH2O    (I,      1:NSOIL,J)  ! soil liquid moisture [m3/m3]
-       ! added by Aaron A. 
+       ! added by Aaron A.
        SMC_intermediate(1:NSOIL) = SMOIS(I, 1:NSOIL,J)     ! volumetric soil moisture [m3/m3] Aaron a. doesnt change a thing
        SH2O_intermediate(1:NSOIL) = SH2O(I, 1:NSOIL,J)      ! volumetric liquid soil moisture [m3/m3] Aaron a. Doesnt change a thing
-       ! end added by Aaron A. 
+       ! end added by Aaron A.
        STC  (-NSNOW+1:    0) = TSNOXY  (I,-NSNOW+1:    0,J) ! snow temperatures [K]
        STC  (      1:NSOIL)  = TSLB    (I,      1:NSOIL,J)  ! soil temperatures [K]
        SWE                   = SNOW    (I,J)                ! snow water equivalent [mm]
@@ -1472,7 +1472,7 @@ SUBROUTINE TRANSFER_MP_PARAMETERS(VEGTYPE,SOILTYPE,SLOPETYPE,SOILCOLOR,CROPTYPE,
              VEGTYPE == LCZ_9_TABLE      .or. VEGTYPE == LCZ_10_TABLE .or. VEGTYPE == LCZ_11_TABLE ) THEN
       parameters%URBAN_FLAG = .TRUE.
   ENDIF
-  IF(VEGTYPE == 41 .or. VEGTYPE == 42 .or. VEGTYPE == 44 .or. VEGTYPE == 45) THEN 
+  IF(VEGTYPE == 41 .or. VEGTYPE == 42 .or. VEGTYPE == 44 .or. VEGTYPE == 45) THEN
      parameters%URBAN_FLAG = .TRUE.
   ENDIF
 
@@ -1632,7 +1632,7 @@ SUBROUTINE TRANSFER_MP_PARAMETERS(VEGTYPE,SOILTYPE,SLOPETYPE,SOILCOLOR,CROPTYPE,
 ! is equal to permeable pavements. This soil type is based on the baseline soil
 ! type within the WRF SOIL.TBL, but has a higher saturated hydraulic conductivity
 
-IF(VEGTYPE.EQ.44) THEN !Permeable Pavement Added by Aaron A. 
+IF(VEGTYPE.EQ.44) THEN !Permeable Pavement Added by Aaron A.
     do isoil = 1, 2
       parameters%BEXP(isoil)   = BEXP_TABLE   (1)
       parameters%DKSAT(isoil)  = 1.0E-4
@@ -1644,7 +1644,7 @@ IF(VEGTYPE.EQ.44) THEN !Permeable Pavement Added by Aaron A.
       parameters%SMCREF(isoil) = SMCREF_TABLE (1)
       parameters%SMCWLT(isoil) = SMCWLT_TABLE (1)
     end do
- ELSE IF(VEGTYPE.EQ.46) THEN ! Green Roof Added by Aaron A. 
+ ELSE IF(VEGTYPE.EQ.46) THEN ! Green Roof Added by Aaron A.
     do isoil = 1, size(soiltype)
       parameters%BEXP(isoil)   = BEXP_TABLE   (4)
       parameters%DKSAT(isoil)  = DKSAT_TABLE  (4)
@@ -1669,7 +1669,7 @@ ELSE
       parameters%SMCREF(isoil) = SMCREF_TABLE (SOILTYPE(isoil))
       parameters%SMCWLT(isoil) = SMCWLT_TABLE (SOILTYPE(isoil))
     end do
-ENDIF 
+ENDIF
 
 
     parameters%F1     = F1_TABLE(SOILTYPE(1))
@@ -4488,8 +4488,8 @@ END SUBROUTINE noahmp_urban
                 end if
 
               end if ! end urban to permeable pavements
-      ENDDO 
-      ENDDO 
+      ENDDO
+      ENDDO
       ENDIF !end hue noahmp sort
       !===========================================================================
       ! normalize
@@ -4531,6 +4531,7 @@ IF(.not.restart)THEN !! only do these if this is a restart, otherwise,we have
      DO i = its,itf
         DO j = jts,jtf
                WRITE(*,*) 'i =', i, 'j =', j, 'ims = ', ims, 'ime = ', ime, 'jms =', jms, 'jme = ', jme
+
              DO mosaic_i=1,mosaic_cat
 
                 !add qualifer for the mosaic croptpes
@@ -4848,7 +4849,7 @@ SUBROUTINE NOAHMPLSM_MOSAIC_HUE(ITIMESTEP,        YR,   JULIAN,   COSZIN,XLAT,XL
                           mh_urb2d,     stdh_urb2d,       lf_urb2d,                             & !SLUCM
                           th_phy,            rho,          p_phy,        ust,                   & !I multi-layer urban
                           gmt,                                                                  & !I multi-layer urban MODIFIED BY AARON A.
-                          RUNONSFXY,RUNONSFXY_mosaic,DETENTION_STORAGEXY,DETENTION_STORAGEXY_mosaic, & 
+                          RUNONSFXY,RUNONSFXY_mosaic,DETENTION_STORAGEXY,DETENTION_STORAGEXY_mosaic, &
                           VOL_FLUX_RUNONXY_mosaic, VOL_FLUX_SMXY_mosaic,                        &
                           MP_RAINC, MP_RAINNC, MP_SHCV, MP_SNOW, MP_GRAUP, MP_HAIL )! HUE SPECIFIC VARIABLES
 
@@ -7664,7 +7665,7 @@ type(noahmp_parameters) :: parameters
               smcwtdxy_mosaic_avg(I,J) = smcwtdxy_mosaic_avg(I,J) + smcwtdxy_mosaic(I,mosaic_i,J)*FAREA
 
               !OUT LSM EQUIVELANTS
-              
+
               t2mvxy_mosaic_avg(I,J) = t2mvxy_mosaic_avg(I,J) + t2mvxy_mosaic(I,mosaic_i,J)*FAREA2
               t2mbxy_mosaic_avg(I,J) = t2mbxy_mosaic_avg(I,J) + t2mbxy_mosaic(I,mosaic_i,J)*FAREA
               q2mvxy_mosaic_avg(I,J) = q2mvxy_mosaic_avg(I,J) + q2mvxy_mosaic(I,mosaic_i,J)*FAREA2
