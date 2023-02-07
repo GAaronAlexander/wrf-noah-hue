@@ -7602,8 +7602,9 @@ type(noahmp_parameters) :: parameters
                ENDIF
 
 
-              TSK_mosaic_avg(I,J) = TSK_mosaic_avg(I,J) + (EMISS_mosaic(I,mosaic_i,J)*TSK_mosaic(I,mosaic_i,J)**4)*FAREA  ! Conserve the longwave radiation
-
+              !TSK_mosaic_avg(I,J) = TSK_mosaic_avg(I,J) + (EMISS_mosaic(I,mosaic_i,J)*TSK_mosaic(I,mosaic_i,J)**4)*FAREA  ! Conserve the longwave radiation
+              TSK_mosaic_avg(I,J) = TSK_mosaic_avg(I,J) + TSK_mosaic(I,mosaic_i,J)*FAREA
+              
               HFX_mosaic_avg(I,J) = HFX_mosaic_avg(I,J) + HFX_mosaic(I,mosaic_i,J)*FAREA
               QFX_mosaic_avg(I,J) = QFX_mosaic_avg(I,J) + QFX_mosaic(I,mosaic_i,J)*FAREA
               LH_mosaic_avg(I,J) =  LH_mosaic_avg(I,J)  + LH_mosaic(I,mosaic_i,J)*FAREA
@@ -7981,7 +7982,7 @@ type(noahmp_parameters) :: parameters
               RUNONSFXY(I,J) = RUNONSFXY_mosaic_avg(I,J)
 
 
-            WRITE(*,*) 'I', I, 'J', J, 'LH', LH(I,J)
+            WRITE(*,*) 'I', I, 'J', J, 'TSK [K]', TSK(I,J)
 
             WRITE(*,*) 'I', I, 'J', J, 'TGVXY', TGVXY(I,J)
 

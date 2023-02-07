@@ -3148,6 +3148,14 @@ if (IOPT_MOS.eq.1) THEN !mosaic check
 #endif
            CALL wrf_debug(100,'in NOAHMP DRV MOSAIC DRIVER')
 
+WRITE(*,*) 'SURFACE DRIVER: Before CALL'
+         DO j = j_start(ij) , j_end(ij)
+               DO i = i_start(ij) , i_end(ij)
+                   write(*,*) 'i', i, 'j', j, 'emiss', emiss(i,j), 'tsk', tsk(i,j)
+               enddo
+         enddo
+
+
            IF ( PRESENT( TSK_mosaic ) .AND. PRESENT( HFX_mosaic ) ) THEN
            CALL NOAHMPLSM_MOSAIC_HUE(ITIMESTEP,        YR,   JULIAN_IN,   COSZEN,XLAT,XLONG, & ! IN : Time/Space-related
                            DZ8W,       DTBL,       DZS,    NUM_SOIL_LAYERS,       DX,            & ! IN : Model configuration
@@ -3288,7 +3296,7 @@ if (IOPT_MOS.eq.1) THEN !mosaic check
 WRITE(*,*) 'SURFACE DRIVER: AFTER CALL'
          DO j = j_start(ij) , j_end(ij)
                DO i = i_start(ij) , i_end(ij)
-                   write(*,*) 'i', i, 'j', j, 'lh', lh(i,j), 'tgvxy', tgvxy(i,j)
+                   write(*,*) 'i', i, 'j', j, 'emiss', emiss(i,j), 'tsk', tsk(i,j)
                enddo 
          enddo
 
@@ -3453,7 +3461,7 @@ ELSEIF (IOPT_MOS.eq.0) THEN ! mosaic call
                             b_t_bep,        b_q_bep,        b_e_bep,    dlg_bep,            & !O multi-layer urban
                            dl_u_bep,         sf_bep,         vl_bep)                          !O multi-layer urban
          ENDIF !urban call
-	 ENDIF ! end mosaic call
+ENDIF ! mosaic 
 
   IF ( iopt_run .EQ. 5 ) THEN
      IF ( MOD(itimestep,STEPWTD) .EQ. 0 ) THEN ! STEPWTD always and only non-zero for iopt_run == 5
