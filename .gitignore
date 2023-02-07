@@ -32,3 +32,5 @@ log.*
 *.exe
 *.out
 *.app
+# wrf specifics
+*.backup.*
